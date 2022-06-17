@@ -1,0 +1,77 @@
+package ua.lviv.iot.coursework.csvmanagers;
+
+import org.springframework.stereotype.Component;
+import ua.lviv.iot.coursework.models.PanelOwner;
+import ua.lviv.iot.coursework.models.templates.PanelOwnerTemplates;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@Component
+public class PanelOwnerCSVManager {
+
+    Date date = Calendar.getInstance().getTime();
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String strDate = dateFormat.format(date);
+
+    Map<Integer, PanelOwner> panelOwnerMap = new HashMap<>();
+    PanelOwnerTemplates templates = new PanelOwnerTemplates();
+
+    public void addStartingValuesToHash(List<Integer> list){
+        var tempList = templates.getTemplateList();
+        for(int i = 0; i<list.size(); i++){
+            panelOwnerMap.put(list.get(i), tempList.get(i));
+        }
+    }
+
+    public PanelOwner readHash(int id) {
+
+        return panelOwnerMap.get(id);
+    }
+
+    public void putToHash(PanelOwner panelOwner) {
+
+        panelOwnerMap.put(panelOwner.getUserId(), panelOwner);
+    }
+
+    public boolean updateHash(int id, PanelOwner panelOwner) {
+
+        if(panelOwnerMap.containsKey(id)){
+            panelOwnerMap.replace(id, panelOwner);
+            return true;
+        }
+        else return false;
+    }
+
+    public List<PanelOwner> getAllHash(){
+        var tempList = new LinkedList<PanelOwner>();
+        for (Map.Entry<Integer, PanelOwner> entry : panelOwnerMap.entrySet()) {
+            tempList.add(entry.getValue());
+        }
+        return tempList;
+    }
+
+    public boolean removeFromHash(int id){
+        if(panelOwnerMap.containsKey(id)){
+            panelOwnerMap.remove(id);
+            return true;
+        }
+        else return false;
+    }
+
+    public void creatingCSVEachDay() throws IOException {
+        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+                "panelownercsvholder/panelOwners"+ strDate + ".csv")){
+            writer.write(templates.getTemplateList().get(0).getHeaders());
+            for(PanelOwner elem: templates.getTemplateList()){
+                writer.write("\r\n");
+                writer.write(elem.toCSV());
+                writer.write("\r\n");
+            }
+        }
+
+    }
+}

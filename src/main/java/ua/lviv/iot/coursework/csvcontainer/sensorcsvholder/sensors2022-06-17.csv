@@ -1,0 +1,6 @@
+timeOfLaunch, timeOfWork, energyGivenPerHour, energyGivenPerDay, levelOfBatteryCapacity, currentAngle, priceOfSoldEnergyPerHour:
+2022-06-12T07:00, 0, 500, 0, 0, 45, 8500
+
+2022-06-12T06:00, 0, 300, 0, 0, 40, 5100
+
+2022-06-12T08:00, 0, 400, 0, 0, 50, 6800
