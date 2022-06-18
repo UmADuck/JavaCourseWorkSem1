@@ -39,9 +39,9 @@ public class PanelOwnerController extends PanelOwnerService {
 
     @PutMapping("/{id}")
     @Override
-    public boolean update(@RequestBody PanelOwner panelOwner, @PathVariable int id) {
+    public boolean update(@PathVariable int id, @RequestBody PanelOwner panelOwner) {
 
-        return panelOwnerService.update(panelOwner, id);
+        return panelOwnerService.update(id, panelOwner);
     }
 
     @DeleteMapping("/{id}")

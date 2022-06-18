@@ -2,6 +2,7 @@ package ua.lviv.iot.coursework.logic.sensor;
 
 import org.springframework.stereotype.Service;
 import ua.lviv.iot.coursework.csvmanagers.SensorCSVManager;
+import ua.lviv.iot.coursework.models.PanelOwner;
 import ua.lviv.iot.coursework.models.Sensor;
 import ua.lviv.iot.coursework.logic.sensor.impl.SensorServiceImpl;
 
@@ -13,44 +14,53 @@ public class SensorService implements SensorServiceImpl {
 
     SensorCSVManager manager = new SensorCSVManager();
 
-
-    public void addAll(List<Sensor> list) {
-        for (Sensor item: list) {
-            manager.putToHash(item);
-        }
-    }
     @Override
     public void create(Sensor sensor) {
 
-        manager.updateData();
+        var checkIfEmpty = new LinkedList<Sensor>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         manager.putToHash(sensor);
     }
 
     @Override
     public List<Sensor> readALL() {
 
-        manager.updateData();
+        var checkIfEmpty = new LinkedList<Sensor>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         return new LinkedList<Sensor>(manager.getAllHash());
     }
 
     @Override
     public Sensor read(int id) {
 
-        manager.updateData();
+        var checkIfEmpty = new LinkedList<Sensor>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         return manager.readHash(id);
     }
 
     @Override
-    public boolean update(Sensor sensor, int id) {
+    public boolean update(int id, Sensor sensor) {
 
-        manager.updateData();
+        var checkIfEmpty = new LinkedList<Sensor>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         return manager.updateHash(id, sensor);
     }
 
     @Override
     public boolean delete(int id) {
 
-        manager.updateData();
         return manager.removeFromHash(id);
     }
 }

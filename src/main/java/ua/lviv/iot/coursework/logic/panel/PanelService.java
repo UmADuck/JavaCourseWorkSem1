@@ -16,24 +16,43 @@ public class PanelService implements PanelServiceImpl {
     @Override
     public void create(SolarPanel solarPanel) {
 
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         manager.putToHash(solarPanel);
     }
 
     @Override
     public List<SolarPanel> readALL() {
-
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         return new LinkedList<SolarPanel>(manager.getAllHash());
     }
 
     @Override
     public SolarPanel read(int id) {
 
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         return manager.readHash(id);
     }
 
     @Override
-    public boolean update(SolarPanel solarPanel, int id) {
+    public boolean update(int id, SolarPanel solarPanel) {
 
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
         return manager.updateHash(id, solarPanel);
     }
 

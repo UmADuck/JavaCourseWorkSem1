@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.beans.Transient;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class Sensor{
 
     private int sensorId;
-    private LocalDateTime timeOfLaunch;
+    private LocalDate timeOfLaunch;
     private int timeOfWork;
     private int energyGivenPerHour;
     private int energyGivenPerDay;
@@ -38,9 +38,9 @@ public class Sensor{
     @Transient
     public String getNonStaticHeaders(){
 
-        return "timeOfLaunch" + ", " + "timeOfWork" + ", " + "energyGivenPerHour" +
+        return "sensorId:" + ", " + "timeOfLaunch" + ", " + "timeOfWork" + ", " + "energyGivenPerHour" +
                 ", " + "energyGivenPerDay" + ", " + "levelOfBatteryCapacity"
-                + ", " + "currentAngle" + ", " + "priceOfSoldEnergyPerHour:";
+                + ", " + "currentAngle" + ", " + "currentPriceForElectricity" + ", " + "priceOfSoldEnergyPerHour:";
     }
 
 
@@ -51,8 +51,8 @@ public class Sensor{
 
     public String nonStaticToCSV(){
 
-        return  timeOfLaunch + ", " + timeOfWork + ", " + energyGivenPerHour +
+        return  sensorId + ", " + timeOfLaunch + ", " + timeOfWork + ", " + energyGivenPerHour +
                 ", " + energyGivenPerDay + ", " + levelOfBatteryCapacity + ", " +
-                currentAngle + ", " + priceOfSoldEnergyPerHour;
+                currentAngle + ", " + currentPriceForElectricity + ", " + priceOfSoldEnergyPerHour;
     }
 }

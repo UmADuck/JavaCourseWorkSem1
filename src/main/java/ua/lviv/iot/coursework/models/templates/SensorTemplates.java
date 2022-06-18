@@ -4,11 +4,10 @@ import ua.lviv.iot.coursework.models.Sensor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class SensorTemplates {
 
@@ -18,13 +17,18 @@ public class SensorTemplates {
     Sensor sensor2 = new Sensor(2, 40);
     Sensor sensor3 = new Sensor(3, 50);
 
-    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-    LocalDateTime  sensor1Start = LocalDate.parse("20220612", formatter).atTime(7, 0);
-    LocalDateTime  sensor2Start = LocalDate.parse("20220612", formatter).atTime(6, 0);
-    LocalDateTime  sensor3Start = LocalDate.parse("20220612", formatter).atTime(8, 0);
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    LocalDate sensor1Start = LocalDate.parse("2022/06/10", formatter);
+    LocalDate sensor2Start = LocalDate.parse("2022/06/10", formatter);
+    LocalDate sensor3Start = LocalDate.parse("2022/06/10", formatter);
+
+    final DateTimeFormatter hourFormatter = DateTimeFormatter.ofPattern("hh:mm");
+    LocalTime sensor1StartTime = LocalTime.of(8, 0);
+    LocalTime sensor2StartTime = LocalTime.of(6, 0);
+    LocalTime sensor3StartTime = LocalTime.of(7, 0);
 
     //estimate time of sunset is 21:00
-    LocalDateTime  sunsetTime = LocalDate.parse("20220612", formatter).atTime(22, 0);
+    LocalTime  sunsetTime = LocalTime.of(22, 0);
 
     LocalDateTime now = LocalDateTime.now();
 
@@ -68,22 +72,22 @@ public class SensorTemplates {
         }
 
         var tempList = new LinkedList<Sensor>();
-        difference1 = (int) ChronoUnit.HOURS.between(LocalDateTime.now(), sensor1Start);
-        difference2 = (int) ChronoUnit.HOURS.between(LocalDateTime.now(), sensor2Start);
-        difference3 = (int) ChronoUnit.HOURS.between(LocalDateTime.now(), sensor3Start);
+        difference1 = (int) ChronoUnit.HOURS.between(sensor1StartTime, LocalDateTime.now().toLocalTime());
+        difference2 = (int) ChronoUnit.HOURS.between(sensor2StartTime, LocalDateTime.now().toLocalTime());
+        difference3 = (int) ChronoUnit.HOURS.between(sensor3StartTime, LocalDateTime.now().toLocalTime());
 
-        calculation1 = (int) ChronoUnit.HOURS.between(sunsetTime, sensor1Start);
-        calculation2 = (int) ChronoUnit.HOURS.between(sunsetTime, sensor2Start);
-        calculation3 = (int) ChronoUnit.HOURS.between(sunsetTime, sensor3Start);
+        sensor1.setTimeOfWork(Math.max(difference1, 0));
+        sensor2.setTimeOfWork(Math.max(difference2, 0));
+        sensor3.setTimeOfWork(Math.max(difference3, 0));
+
+        calculation1 = (int) ChronoUnit.HOURS.between(sunsetTime, sensor1StartTime);
+        calculation2 = (int) ChronoUnit.HOURS.between(sunsetTime, sensor2StartTime);
+        calculation3 = (int) ChronoUnit.HOURS.between(sunsetTime, sensor3StartTime);
 
         var calculationList = new ArrayList<Integer>();
         calculationList.add(calculation1);
         calculationList.add(calculation2);
         calculationList.add(calculation3);
-
-        sensor1.setTimeOfWork(Math.max(difference1, 0));
-        sensor2.setTimeOfWork(Math.max(difference2, 0));
-        sensor3.setTimeOfWork(Math.max(difference3, 0));
 
         sensor1.setTimeOfLaunch(sensor1Start);
         sensor2.setTimeOfLaunch(sensor2Start);

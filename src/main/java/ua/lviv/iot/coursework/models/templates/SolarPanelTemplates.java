@@ -9,11 +9,11 @@ import java.util.List;
 public class SolarPanelTemplates {
 
     SolarPanel panel1 = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
-            5000, "Ukraine, Lviv");
+            5000, "Ukraine/Lviv");
     SolarPanel panel2 = new SolarPanel(2, PanelTypes.POLYCRYSTALLINE, 300,
-            3000, "Ukraine, Lviv");
+            3000, "Ukraine/Lviv");
     SolarPanel panel3 = new SolarPanel(3, PanelTypes.THIN_FILM, 400,
-            4000, "Ukraine, Lviv");
+            4000, "Ukraine/Lviv");
 
     public List<SolarPanel> getTemplateList(){
         var tempList = new ArrayList<SolarPanel>();

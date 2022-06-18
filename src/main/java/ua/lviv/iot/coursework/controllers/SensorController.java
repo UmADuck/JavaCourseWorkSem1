@@ -38,9 +38,9 @@ public class SensorController extends SensorService {
 
     @PutMapping("/{id}")
     @Override
-    public boolean update(@RequestBody Sensor sensor, @PathVariable int id) {
+    public boolean update(@PathVariable int id, @RequestBody Sensor sensor) {
 
-        return sensorService.update(sensor, id);
+        return sensorService.update(id, sensor);
     }
 
     @DeleteMapping("/{id}")

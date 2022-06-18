@@ -1,11 +1,19 @@
 package ua.lviv.iot.coursework.csvmanagers;
 
 import org.springframework.stereotype.Component;
+import ua.lviv.iot.coursework.models.PanelOwner;
+import ua.lviv.iot.coursework.models.PanelTypes;
+import ua.lviv.iot.coursework.models.Sensor;
 import ua.lviv.iot.coursework.models.SolarPanel;
 import ua.lviv.iot.coursework.models.templates.SolarPanelTemplates;
 
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,13 +25,52 @@ public class PanelCSVManager {
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String strDate = dateFormat.format(date);
 
+    Date dateWithHours = Calendar.getInstance().getTime();
+    DateFormat dateFormatWithHours = new SimpleDateFormat("yyyy-MM-dd-hh:mm");
+    String strDateWithHours = dateFormatWithHours.format(dateWithHours);
+
     Map<Integer, SolarPanel> panelMap = new HashMap<>();
     SolarPanelTemplates templates = new SolarPanelTemplates();
+
+    private static SolarPanel createSolarPanel(String[] metadata) {
+        int panelId = Integer.parseInt(metadata[0]);
+        PanelTypes panelType = PanelTypes.valueOf(metadata[1]);
+        int panelPower = Integer.parseInt(metadata[2]);
+        int batteryCapacity = Integer.parseInt(metadata[3]);
+        String panelAddress = metadata[4];
+
+        return new SolarPanel(panelId, panelType, panelPower, batteryCapacity, panelAddress);
+    }
 
     public void addStartingValuesToHash(List<Integer> list){
         var tempList = templates.getTemplateList();
         for(int i = 0; i<list.size(); i++){
             panelMap.put(list.get(i), tempList.get(i));
+        }
+    }
+
+    public void addDataToHashFromCSVFile() {
+        var fileName = "src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+                "panelcsvholder/panelData.csv";
+        Path pathToFile = Paths.get(fileName);
+        try (BufferedReader br = Files.newBufferedReader(pathToFile,
+                StandardCharsets.US_ASCII)) {
+            long numberOfLines = 0;
+            numberOfLines = Files.lines(pathToFile).count();
+
+            for(int i = 0; i < numberOfLines; i++){
+                String line = br.readLine();
+                String[] attributes = line.split(",\s");
+
+                SolarPanel solarPanel = createSolarPanel(attributes);
+                if(!panelMap.containsKey(solarPanel.getPanelId())) {
+                    panelMap.put(solarPanel.getPanelId(), solarPanel);
+                }
+                line = null;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -67,9 +114,19 @@ public class PanelCSVManager {
     public void creatingCSVEachDay() throws IOException {
         try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
                 "panelcsvholder/solarPanels" + strDate + ".csv")){
-            writer.write(templates.getTemplateList().get(0).getHeaders());
+            writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: "+ strDateWithHours);
             for(SolarPanel elem: templates.getTemplateList()){
                 writer.write("\r\n");
+                writer.write(elem.toCSV());
+            }
+        }
+    }
+
+    public void creatingOnlyObjectDataCSV()throws IOException{
+        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+                "panelcsvholder/panelData" + ".csv")){
+
+            for(SolarPanel elem: templates.getTemplateList()){
                 writer.write(elem.toCSV());
                 writer.write("\r\n");
             }

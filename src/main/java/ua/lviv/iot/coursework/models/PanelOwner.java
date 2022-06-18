@@ -15,7 +15,6 @@ import java.beans.Transient;
 @Component
 public class PanelOwner {
 
-
     private int userId;
     private String fullName;
     private String ownAddress;

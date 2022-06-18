@@ -1,0 +1,5 @@
+panelId, panelType, panelPower, batteryCapacity, panelAddress:
+time: 2022-06-18-11:19
+1, MONOCRYSTALLINE, 500, 5000, Ukraine/Lviv
+2, POLYCRYSTALLINE, 300, 3000, Ukraine/Lviv
+3, THIN_FILM, 400, 4000, Ukraine/Lviv

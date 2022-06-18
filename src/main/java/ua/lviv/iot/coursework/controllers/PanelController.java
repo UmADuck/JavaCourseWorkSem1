@@ -38,9 +38,9 @@ public class PanelController extends PanelService {
     }
     @PutMapping("/{id}")
     @Override
-    public boolean update(@RequestBody SolarPanel solarPanel, @PathVariable int id) {
+    public boolean update(@PathVariable int id, @RequestBody SolarPanel solarPanel) {
 
-        return panelService.update(solarPanel, id);
+        return panelService.update(id, solarPanel);
     }
 
     @DeleteMapping("/{id}")
