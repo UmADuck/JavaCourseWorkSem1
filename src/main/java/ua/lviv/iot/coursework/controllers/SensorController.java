@@ -3,17 +3,17 @@ package ua.lviv.iot.coursework.controllers;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.coursework.models.Sensor;
-import ua.lviv.iot.coursework.logic.sensor.SensorService;
+import ua.lviv.iot.coursework.logic.sensor.impl.SensorServiceImpl;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
 @RequestMapping("/sensor")
-public class SensorController extends SensorService {
+public class SensorController extends SensorServiceImpl {
 
     @Qualifier("SensorService")
-    private final SensorService sensorService = new SensorService();
+    private final SensorServiceImpl sensorService = new SensorServiceImpl();
 
     @PostMapping
     @Override

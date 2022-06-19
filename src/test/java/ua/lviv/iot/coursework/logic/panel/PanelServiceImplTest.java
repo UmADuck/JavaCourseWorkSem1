@@ -2,7 +2,7 @@ package ua.lviv.iot.coursework.logic.panel;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ua.lviv.iot.coursework.csvmanagers.PanelCSVManager;
+import ua.lviv.iot.coursework.logic.panel.impl.PanelServiceImpl;
 import ua.lviv.iot.coursework.models.PanelTypes;
 import ua.lviv.iot.coursework.models.SolarPanel;
 
@@ -10,11 +10,11 @@ import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PanelServiceTest {
+class PanelServiceImplTest {
 
     @Test
     void create() {
-        var panelService = new PanelService();
+        var panelService = new PanelServiceImpl();
         var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
                 5000, "Ukraine, Lviv");
         var testList = new LinkedList<SolarPanel>();
@@ -25,7 +25,7 @@ class PanelServiceTest {
 
     @Test
     void readALL() {
-        var panelService = new PanelService();
+        var panelService = new PanelServiceImpl();
         var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
                 5000, "Ukraine, Lviv");
         var panel2 = new SolarPanel(2, PanelTypes.POLYCRYSTALLINE, 300,
@@ -42,14 +42,14 @@ class PanelServiceTest {
 
     @Test
     void read() {
-        var panelService = new PanelService();
+        var panelService = new PanelServiceImpl();
         var isEmptyHash = panelService.read(1);
         Assertions.assertNull(isEmptyHash);
     }
 
     @Test
     void update() {
-        var panelService = new PanelService();
+        var panelService = new PanelServiceImpl();
         var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
                 5000, "Ukraine, Lviv");
         var panel2 = new SolarPanel(2, PanelTypes.POLYCRYSTALLINE, 300,
@@ -64,7 +64,7 @@ class PanelServiceTest {
 
     @Test
     void delete() {
-        var panelService = new PanelService();
+        var panelService = new PanelServiceImpl();
         var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
                 5000, "Ukraine, Lviv");
         var testList = new LinkedList<SolarPanel>();

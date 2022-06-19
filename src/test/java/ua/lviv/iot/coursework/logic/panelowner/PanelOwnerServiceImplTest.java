@@ -2,21 +2,16 @@ package ua.lviv.iot.coursework.logic.panelowner;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ua.lviv.iot.coursework.csvmanagers.PanelCSVManager;
-import ua.lviv.iot.coursework.csvmanagers.PanelOwnerCSVManager;
+import ua.lviv.iot.coursework.logic.panelowner.impl.PanelOwnerServiceImpl;
 import ua.lviv.iot.coursework.models.PanelOwner;
-import ua.lviv.iot.coursework.models.PanelTypes;
-import ua.lviv.iot.coursework.models.SolarPanel;
 
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class PanelOwnerServiceTest {
+class PanelOwnerServiceImplTest {
 
     @Test
     void create() {
-        var panelOwnerService = new PanelOwnerService();
+        var panelOwnerService = new PanelOwnerServiceImpl();
         var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
         var testList = new LinkedList<PanelOwner>();
         panelOwnerService.create(objToHash);
@@ -26,7 +21,7 @@ class PanelOwnerServiceTest {
 
     @Test
     void readALL() {
-        var panelOwnerService = new PanelOwnerService();
+        var panelOwnerService = new PanelOwnerServiceImpl();
         var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
         var owner2 = new PanelOwner(2, "Mykola Zinchenko", "Ukraine/Kyiv");
         var testList = new LinkedList<PanelOwner>();
@@ -41,14 +36,14 @@ class PanelOwnerServiceTest {
 
     @Test
     void read() {
-        var panelOwnerService = new PanelOwnerService();
+        var panelOwnerService = new PanelOwnerServiceImpl();
         var isEmptyHash = panelOwnerService.read(1);
         Assertions.assertNull(isEmptyHash);
     }
 
     @Test
     void update() {
-        var panelOwnerService = new PanelOwnerService();
+        var panelOwnerService = new PanelOwnerServiceImpl();
         var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
         var panelOwner = new PanelOwner(2, "Mykola Zinchenko", "Ukraine/Kyiv");
         panelOwnerService.create(objToHash);
@@ -61,7 +56,7 @@ class PanelOwnerServiceTest {
 
     @Test
     void delete() {
-        var panelOwnerService = new PanelOwnerService();
+        var panelOwnerService = new PanelOwnerServiceImpl();
         var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
         var testList = new LinkedList<PanelOwner>();
         testList.add(objToHash);

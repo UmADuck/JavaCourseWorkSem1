@@ -1,14 +1,64 @@
 package ua.lviv.iot.coursework.logic.panel.impl;
 
+import org.springframework.stereotype.Service;
+import ua.lviv.iot.coursework.csvmanagers.PanelCSVManager;
+import ua.lviv.iot.coursework.logic.panel.PanelService;
 import ua.lviv.iot.coursework.models.SolarPanel;
 
+import java.util.LinkedList;
 import java.util.List;
 
-public interface PanelServiceImpl {
+@Service("PanelService")
+public class PanelServiceImpl implements PanelService {
 
-    public void create(SolarPanel solarPanel);
-    public List<SolarPanel> readALL();
-    public SolarPanel read(int id);
-    public boolean update(int id, SolarPanel solarPanel);
-    public boolean delete(int id);
+    PanelCSVManager manager = new PanelCSVManager();
+
+    @Override
+    public void create(SolarPanel solarPanel) {
+
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
+        manager.putToHash(solarPanel);
+    }
+
+    @Override
+    public List<SolarPanel> readALL() {
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
+        return new LinkedList<SolarPanel>(manager.getAllHash());
+    }
+
+    @Override
+    public SolarPanel read(int id) {
+
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
+        return manager.readHash(id);
+    }
+
+    @Override
+    public boolean update(int id, SolarPanel solarPanel) {
+
+        var checkIfEmpty = new LinkedList<SolarPanel>();
+        checkIfEmpty.add(manager.readHash(1));
+        if (checkIfEmpty.isEmpty()) {
+            manager.addDataToHashFromCSVFile();
+        }
+        return manager.updateHash(id, solarPanel);
+    }
+
+    @Override
+    public boolean delete(int id) {
+
+        return manager.removeFromHash(id);
+    }
 }

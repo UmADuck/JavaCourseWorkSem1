@@ -2,18 +2,16 @@ package ua.lviv.iot.coursework.logic.sensor;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ua.lviv.iot.coursework.csvmanagers.SensorCSVManager;
+import ua.lviv.iot.coursework.logic.sensor.impl.SensorServiceImpl;
 import ua.lviv.iot.coursework.models.Sensor;
 
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class SensorServiceTest {
+class SensorServiceImplTest {
 
     @Test
     void create() {
-        var sensorService = new SensorService();
+        var sensorService = new SensorServiceImpl();
         var objToHash = new Sensor(1, 45);
         var testList = new LinkedList<Sensor>();
         sensorService.create(objToHash);
@@ -23,7 +21,7 @@ class SensorServiceTest {
 
     @Test
     void readALL() {
-        var sensorService = new SensorService();
+        var sensorService = new SensorServiceImpl();
         var objToHash = new Sensor(1, 45);
         var sensor2 = new Sensor(2, 40);
         var testList = new LinkedList<Sensor>();
@@ -38,14 +36,14 @@ class SensorServiceTest {
 
     @Test
     void read() {
-        var sensorService = new SensorService();
+        var sensorService = new SensorServiceImpl();
         var isEmptyHash = sensorService.read(1);
         Assertions.assertNull(isEmptyHash);
     }
 
     @Test
     void update() {
-        var sensorService = new SensorService();
+        var sensorService = new SensorServiceImpl();
         var objToHash = new Sensor(1, 45);
         var panel2 = new Sensor(2, 40);
         sensorService.create(objToHash);
@@ -58,7 +56,7 @@ class SensorServiceTest {
 
     @Test
     void delete() {
-        var sensorService = new SensorService();
+        var sensorService = new SensorServiceImpl();
         var objToHash = new Sensor(1, 45);
         var testList = new LinkedList<Sensor>();
         testList.add(objToHash);

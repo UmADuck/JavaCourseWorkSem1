@@ -3,7 +3,7 @@ package ua.lviv.iot.coursework.controllers;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.coursework.models.PanelOwner;
-import ua.lviv.iot.coursework.logic.panelowner.PanelOwnerService;
+import ua.lviv.iot.coursework.logic.panelowner.impl.PanelOwnerServiceImpl;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
@@ -11,10 +11,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/panelowner")
 
-public class PanelOwnerController extends PanelOwnerService {
+public class PanelOwnerController extends PanelOwnerServiceImpl {
 
     @Qualifier("PanelOwnerService")
-    private final PanelOwnerService panelOwnerService = new PanelOwnerService();
+    private final PanelOwnerServiceImpl panelOwnerService = new PanelOwnerServiceImpl();
 
     @PostMapping
     @Override
