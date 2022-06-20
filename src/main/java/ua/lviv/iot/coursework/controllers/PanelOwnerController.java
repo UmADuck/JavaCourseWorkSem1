@@ -1,5 +1,6 @@
 package ua.lviv.iot.coursework.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.coursework.models.PanelOwner;
@@ -10,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/panelowner")
-
 public class PanelOwnerController extends PanelOwnerServiceImpl {
 
     @Qualifier("PanelOwnerService")
@@ -30,11 +30,12 @@ public class PanelOwnerController extends PanelOwnerServiceImpl {
         return panelOwnerService.readALL();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping
+    @RequestMapping("/{id}")
     @Override
     public PanelOwner read(@PathParam("id") @PathVariable("id") int id) {
 
-        return panelOwnerService.read(id);
+            return panelOwnerService.read(id);
     }
 
     @PutMapping("/{id}")

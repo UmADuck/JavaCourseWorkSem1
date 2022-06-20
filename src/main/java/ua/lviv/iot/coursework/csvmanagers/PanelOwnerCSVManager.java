@@ -19,16 +19,16 @@ import java.util.*;
 @Component
 public class PanelOwnerCSVManager {
 
-    Date date = Calendar.getInstance().getTime();
+    private final Date date = Calendar.getInstance().getTime();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String strDate = dateFormat.format(date);
 
-    Date dateWithHours = Calendar.getInstance().getTime();
+    private final Date dateWithHours = Calendar.getInstance().getTime();
     DateFormat dateFormatWithHours = new SimpleDateFormat("yyyy-MM-dd-hh:mm");
     String strDateWithHours = dateFormatWithHours.format(dateWithHours);
 
-    Map<Integer, PanelOwner> panelOwnerMap = new HashMap<>();
-    PanelOwnerTemplates templates = new PanelOwnerTemplates();
+    private final Map<Integer, PanelOwner> panelOwnerMap = new HashMap<>();
+    private final PanelOwnerTemplates templates = new PanelOwnerTemplates();
 
     private static PanelOwner createPanelOwner(String[] metadata) {
         int userId = Integer.parseInt(metadata[0]);
@@ -46,7 +46,7 @@ public class PanelOwnerCSVManager {
     }
 
     public void addDataToHashFromCSVFile() {
-        var fileName = "src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        var fileName = "src/main/resources/csvcontainer/" +
                 "panelownercsvholder/panelOwnerData.csv";
         Path pathToFile = Paths.get(fileName);
         try (BufferedReader br = Files.newBufferedReader(pathToFile,
@@ -106,7 +106,7 @@ public class PanelOwnerCSVManager {
     }
 
     public void creatingCSVEachDay() throws IOException {
-        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/" +
                 "panelownercsvholder/panelOwners"+ strDate + ".csv")){
             writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: "+ strDateWithHours);
             for(PanelOwner elem: templates.getTemplateList()){
@@ -116,7 +116,7 @@ public class PanelOwnerCSVManager {
         }
     }
     public void creatingOnlyObjectDataCSV()throws IOException{
-        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/" +
                 "panelownercsvholder/panelOwnerData" + ".csv")){
 
             for(PanelOwner elem: templates.getTemplateList()){

@@ -21,18 +21,18 @@ import java.util.*;
 @Component
 public class SensorCSVManager {
 
-    Map<Integer, Sensor> sensorMap = new HashMap<>();
+    private final Map<Integer, Sensor> sensorMap = new HashMap<>();
     SensorTemplates templates = new SensorTemplates();
 
-    Date date = Calendar.getInstance().getTime();
+    private final Date date = Calendar.getInstance().getTime();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String strDate = dateFormat.format(date);
 
-    Date dateWithHours = Calendar.getInstance().getTime();
+    private final Date dateWithHours = Calendar.getInstance().getTime();
     DateFormat dateFormatWithHours = new SimpleDateFormat("yyyy-MM-dd-hh:mm");
     String strDateWithHours = dateFormatWithHours.format(dateWithHours);
 
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    static private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private static Sensor createSensor(String[] metadata) throws ParseException {
         int sensorId = Integer.parseInt(metadata[0]);
@@ -57,7 +57,7 @@ public class SensorCSVManager {
     }
 
     public void addDataToHashFromCSVFile() {
-        var fileName = "src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        var fileName = "src/main/resources/csvcontainer/" +
                 "sensorcsvholder/sensorData.csv";
         Path pathToFile = Paths.get(fileName);
         try (BufferedReader br = Files.newBufferedReader(pathToFile,
@@ -124,7 +124,7 @@ public class SensorCSVManager {
     }
 
     public void creatingCSVEachDay() throws IOException {
-        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/" +
                 "sensorcsvholder/sensors" + strDate + ".csv")){
             writer.write(templates.getTemplateList().get(0).getStaticHeaders());
             for(Sensor elem: templates.getTemplateList()){
@@ -136,7 +136,7 @@ public class SensorCSVManager {
     }
 
     public void updateCSVEachHour()throws IOException{
-        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/" +
                 "sensorcsvholder/sensors" + strDate + ".csv")){
 
             writer.write(templates.getTemplateList().get(0).getNonStaticHeaders() + "\ntime: "+ strDateWithHours);
@@ -148,7 +148,7 @@ public class SensorCSVManager {
     }
 
     public void creatingOnlyObjectDataCSV()throws IOException{
-        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/" +
                 "sensorcsvholder/sensorData" + ".csv")){
 
             for(Sensor elem: templates.getTemplateList()){

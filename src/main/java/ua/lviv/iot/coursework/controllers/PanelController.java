@@ -10,7 +10,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/solarpanel")
-
 public class PanelController extends PanelServiceImpl {
 
     @Qualifier("PanelService")

@@ -11,13 +11,13 @@ import java.util.List;
 @Service("PanelService")
 public class PanelServiceImpl implements PanelService {
 
-    PanelCSVManager manager = new PanelCSVManager();
+
+    private final PanelCSVManager manager = new PanelCSVManager();
 
     @Override
     public void create(SolarPanel solarPanel) {
 
-        var checkIfEmpty = new LinkedList<SolarPanel>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<SolarPanel>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -26,8 +26,7 @@ public class PanelServiceImpl implements PanelService {
 
     @Override
     public List<SolarPanel> readALL() {
-        var checkIfEmpty = new LinkedList<SolarPanel>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<SolarPanel>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -37,8 +36,7 @@ public class PanelServiceImpl implements PanelService {
     @Override
     public SolarPanel read(int id) {
 
-        var checkIfEmpty = new LinkedList<SolarPanel>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<SolarPanel>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -48,8 +46,7 @@ public class PanelServiceImpl implements PanelService {
     @Override
     public boolean update(int id, SolarPanel solarPanel) {
 
-        var checkIfEmpty = new LinkedList<SolarPanel>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<SolarPanel>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }

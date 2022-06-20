@@ -11,13 +11,12 @@ import java.util.List;
 @Service("SensorService")
 public class SensorServiceImpl implements SensorService {
 
-    SensorCSVManager manager = new SensorCSVManager();
+    private final SensorCSVManager manager = new SensorCSVManager();
 
     @Override
     public void create(Sensor sensor) {
 
-        var checkIfEmpty = new LinkedList<Sensor>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<Sensor>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -27,8 +26,7 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public List<Sensor> readALL() {
 
-        var checkIfEmpty = new LinkedList<Sensor>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<Sensor>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -38,8 +36,7 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public Sensor read(int id) {
 
-        var checkIfEmpty = new LinkedList<Sensor>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<Sensor>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -49,8 +46,7 @@ public class SensorServiceImpl implements SensorService {
     @Override
     public boolean update(int id, Sensor sensor) {
 
-        var checkIfEmpty = new LinkedList<Sensor>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<Sensor>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }

@@ -11,13 +11,12 @@ import java.util.List;
 @Service("PanelOwnerService")
 public class PanelOwnerServiceImpl implements PanelOwnerService {
 
-    PanelOwnerCSVManager manager = new PanelOwnerCSVManager();
+    private final PanelOwnerCSVManager manager = new PanelOwnerCSVManager();
 
     @Override
     public void create(PanelOwner panelOwner) {
 
-        var checkIfEmpty = new LinkedList<PanelOwner>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<PanelOwner>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -27,8 +26,7 @@ public class PanelOwnerServiceImpl implements PanelOwnerService {
     @Override
     public List<PanelOwner> readALL() {
 
-        var checkIfEmpty = new LinkedList<PanelOwner>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<PanelOwner>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -38,8 +36,7 @@ public class PanelOwnerServiceImpl implements PanelOwnerService {
     @Override
     public PanelOwner read(int id) {
 
-        var checkIfEmpty = new LinkedList<PanelOwner>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<PanelOwner>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
@@ -49,8 +46,7 @@ public class PanelOwnerServiceImpl implements PanelOwnerService {
     @Override
     public boolean update(int id, PanelOwner panelOwner) {
 
-        var checkIfEmpty = new LinkedList<PanelOwner>();
-        checkIfEmpty.add(manager.readHash(1));
+        var checkIfEmpty = new LinkedList<PanelOwner>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }

@@ -21,16 +21,16 @@ import java.util.*;
 @Component
 public class PanelCSVManager {
 
-    Date date = Calendar.getInstance().getTime();
+    private final Date date = Calendar.getInstance().getTime();
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     String strDate = dateFormat.format(date);
 
-    Date dateWithHours = Calendar.getInstance().getTime();
+    private final Date dateWithHours = Calendar.getInstance().getTime();
     DateFormat dateFormatWithHours = new SimpleDateFormat("yyyy-MM-dd-hh:mm");
     String strDateWithHours = dateFormatWithHours.format(dateWithHours);
 
-    Map<Integer, SolarPanel> panelMap = new HashMap<>();
-    SolarPanelTemplates templates = new SolarPanelTemplates();
+    private final Map<Integer, SolarPanel> panelMap = new HashMap<>();
+    private final SolarPanelTemplates templates = new SolarPanelTemplates();
 
     private static SolarPanel createSolarPanel(String[] metadata) {
         int panelId = Integer.parseInt(metadata[0]);
@@ -50,7 +50,7 @@ public class PanelCSVManager {
     }
 
     public void addDataToHashFromCSVFile() {
-        var fileName = "src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
+        var fileName = "src/main/resources/csvcontainer/" +
                 "panelcsvholder/panelData.csv";
         Path pathToFile = Paths.get(fileName);
         try (BufferedReader br = Files.newBufferedReader(pathToFile,
@@ -112,8 +112,8 @@ public class PanelCSVManager {
     }
 
     public void creatingCSVEachDay() throws IOException {
-        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
-                "panelcsvholder/solarPanels" + strDate + ".csv")){
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
+                "solarPanels" + strDate + ".csv")){
             writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: "+ strDateWithHours);
             for(SolarPanel elem: templates.getTemplateList()){
                 writer.write("\r\n");
@@ -123,8 +123,8 @@ public class PanelCSVManager {
     }
 
     public void creatingOnlyObjectDataCSV()throws IOException{
-        try(FileWriter writer = new FileWriter("src/main/java/ua/lviv/iot/coursework/csvcontainer/" +
-                "panelcsvholder/panelData" + ".csv")){
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
+                "panelData" + ".csv")){
 
             for(SolarPanel elem: templates.getTemplateList()){
                 writer.write(elem.toCSV());
