@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.coursework.models.SolarPanel;
 import ua.lviv.iot.coursework.logic.panel.impl.PanelServiceImpl;
+import ua.lviv.iot.coursework.payroll.PanelNotFoundException;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -29,12 +29,6 @@ public class PanelController extends PanelServiceImpl {
         return panelServiceImpl.readALL();
     }
 
-    @GetMapping("/{id}")
-    @Override
-    public SolarPanel read(@PathParam("id") @PathVariable("id") int id) {
-
-        return panelServiceImpl.read(id);
-    }
     @PutMapping("/{id}")
     @Override
     public boolean update(@PathVariable int id, @RequestBody SolarPanel solarPanel) {
@@ -45,6 +39,20 @@ public class PanelController extends PanelServiceImpl {
     @DeleteMapping("/{id}")
     @Override
     public boolean delete(@PathVariable int id) {
+        SolarPanel solarPanel = panelServiceImpl.read(id);
+        if(solarPanel == null)
+            throw new PanelNotFoundException("id" + id);
         return panelServiceImpl.delete(id);
     }
+
+    @GetMapping("/{id}")
+    @Override
+    public SolarPanel read(@PathVariable int id){
+        SolarPanel solarPanel = panelServiceImpl.read(id);
+        if(solarPanel == null)
+            throw new PanelNotFoundException("id" + id);
+        return solarPanel;
+    }
 }
+
+

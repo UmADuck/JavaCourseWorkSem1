@@ -104,7 +104,8 @@ public class SensorCSVManager {
             sensor.setSensorId(id);
             return true;
         }
-        else return false;
+        else sensorMap.put(id, sensor);
+        return false;
     }
 
     public List<Sensor> getAllHash(){

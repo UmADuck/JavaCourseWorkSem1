@@ -86,7 +86,8 @@ public class PanelOwnerCSVManager {
             panelOwner.setUserId(id);
             return true;
         }
-        else return false;
+        else panelOwnerMap.put(id, panelOwner);
+        return false;
     }
 
     public List<PanelOwner> getAllHash(){

@@ -92,7 +92,8 @@ public class PanelCSVManager {
             solarPanel.setPanelId(id);
             return true;
         }
-        else return false;
+        else panelMap.put(id, solarPanel);
+        return false;
     }
 
     public LinkedList<SolarPanel> getAllHash(){

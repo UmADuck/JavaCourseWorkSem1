@@ -1,12 +1,11 @@
 package ua.lviv.iot.coursework.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.coursework.models.PanelOwner;
 import ua.lviv.iot.coursework.logic.panelowner.impl.PanelOwnerServiceImpl;
+import ua.lviv.iot.coursework.payroll.OwnerNotFoundException;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -14,41 +13,45 @@ import java.util.List;
 public class PanelOwnerController extends PanelOwnerServiceImpl {
 
     @Qualifier("PanelOwnerService")
-    private final PanelOwnerServiceImpl panelOwnerService = new PanelOwnerServiceImpl();
+    private final PanelOwnerServiceImpl panelOwnerServiceImpl = new PanelOwnerServiceImpl();
 
     @PostMapping
     @Override
     public void create(@RequestBody PanelOwner panelOwner) {
 
-        panelOwnerService.create(panelOwner);
+        panelOwnerServiceImpl.create(panelOwner);
     }
 
     @GetMapping
     @Override
     public List<PanelOwner> readALL() {
 
-        return panelOwnerService.readALL();
-    }
-
-    @GetMapping
-    @RequestMapping("/{id}")
-    @Override
-    public PanelOwner read(@PathParam("id") @PathVariable("id") int id) {
-
-            return panelOwnerService.read(id);
+        return panelOwnerServiceImpl.readALL();
     }
 
     @PutMapping("/{id}")
     @Override
     public boolean update(@PathVariable int id, @RequestBody PanelOwner panelOwner) {
 
-        return panelOwnerService.update(id, panelOwner);
+        return panelOwnerServiceImpl.update(id, panelOwner);
     }
 
     @DeleteMapping("/{id}")
     @Override
     public boolean delete(@PathVariable int id) {
+        PanelOwner panelOwner = panelOwnerServiceImpl.read(id);
+        if(panelOwner == null)
+            throw new OwnerNotFoundException("id" + id);
+        return panelOwnerServiceImpl.delete(id);
+    }
 
-        return panelOwnerService.delete(id);
+    @GetMapping("/{id}")
+    @Override
+    public PanelOwner read(@PathVariable int id){
+        PanelOwner panelOwner = panelOwnerServiceImpl.read(id);
+        if(panelOwner == null)
+            throw new OwnerNotFoundException("id" + id);
+        return panelOwner;
     }
 }
+
