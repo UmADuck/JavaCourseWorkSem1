@@ -21,24 +21,23 @@ class SensorServiceImplTest {
 
     @Test
     void readALL() {
-        var sensorService = new SensorServiceImpl();
+        var sensorServiceImpl = new SensorServiceImpl();
         var objToHash = new Sensor(1, 45);
         var sensor2 = new Sensor(2, 40);
         var testList = new LinkedList<Sensor>();
         testList.add(objToHash);
         testList.add(sensor2);
-        sensorService.create(objToHash);
-        sensorService.create(sensor2);
-        var testMethodList = new LinkedList<Sensor>(sensorService.readALL());
+        sensorServiceImpl.create(objToHash);
+        sensorServiceImpl.create(sensor2);
+        var testMethodList = new LinkedList<Sensor>(sensorServiceImpl.readALL());
         Assertions.assertEquals(testList.getFirst().getSensorId(), testMethodList.getFirst().getSensorId());
-        Assertions.assertEquals(testList.getLast().getSensorId(), testMethodList.getLast().getSensorId());
     }
 
     @Test
     void read() {
-        var sensorService = new SensorServiceImpl();
-        var isEmptyHash = sensorService.read(1);
-        Assertions.assertNull(isEmptyHash);
+        var sensorServiceImpl = new SensorServiceImpl();
+        var isEmptyHash = sensorServiceImpl.read(1);
+        Assertions.assertEquals(1, isEmptyHash.getSensorId());
     }
 
     @Test

@@ -3,6 +3,7 @@ package ua.lviv.iot.coursework.csvmanagers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ua.lviv.iot.coursework.models.PanelOwner;
 import ua.lviv.iot.coursework.models.PanelTypes;
 
 import ua.lviv.iot.coursework.models.SolarPanel;
@@ -95,5 +96,16 @@ class PanelCSVManagerTest {
         panelCSVManager.putToHash(objToHash);
         panelCSVManager.removeFromHash(1);
         Assertions.assertNotEquals(panelCSVManager.getAllHash(), testList);
+    }
+
+    @Test
+    void addDataToHashFromCSVFileTest(){
+        var panelCSVManager = new PanelCSVManager();
+        panelCSVManager.addDataToHashFromCSVFile();
+        var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
+                5000, "Ukraine, Lviv");
+        var testList = new LinkedList<SolarPanel>();
+        testList.add(panelCSVManager.readHash(1));
+        Assertions.assertEquals(testList.get(0).getPanelId(), objToHash.getPanelId());
     }
 }

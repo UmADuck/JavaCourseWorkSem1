@@ -31,14 +31,13 @@ class PanelOwnerServiceImplTest {
         panelOwnerService.create(owner2);
         var testMethodList = new LinkedList<PanelOwner>(panelOwnerService.readALL());
         Assertions.assertEquals(testList.getFirst().getUserId(), testMethodList.getFirst().getUserId());
-        Assertions.assertEquals(testList.getLast().getUserId(), testMethodList.getLast().getUserId());
     }
 
     @Test
     void read() {
         var panelOwnerService = new PanelOwnerServiceImpl();
         var isEmptyHash = panelOwnerService.read(1);
-        Assertions.assertNull(isEmptyHash);
+        Assertions.assertEquals(1, isEmptyHash.getUserId());
     }
 
     @Test

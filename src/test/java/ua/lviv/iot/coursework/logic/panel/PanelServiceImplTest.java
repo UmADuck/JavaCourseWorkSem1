@@ -37,14 +37,13 @@ class PanelServiceImplTest {
         panelService.create(panel2);
         var testMethodList = new LinkedList<SolarPanel>(panelService.readALL());
         Assertions.assertEquals(testList.getFirst().getPanelId(), testMethodList.getFirst().getPanelId());
-        Assertions.assertEquals(testList.getLast().getPanelId(), testMethodList.getLast().getPanelId());
     }
 
     @Test
     void read() {
         var panelService = new PanelServiceImpl();
         var isEmptyHash = panelService.read(1);
-        Assertions.assertNull(isEmptyHash);
+        Assertions.assertEquals(1, isEmptyHash.getPanelId());
     }
 
     @Test

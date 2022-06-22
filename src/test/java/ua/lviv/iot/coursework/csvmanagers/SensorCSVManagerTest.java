@@ -82,4 +82,14 @@ class SensorCSVManagerTest {
         sensorCSVManager.removeFromHash(1);
         Assertions.assertNotEquals(sensorCSVManager.getAllHash(), testList);
     }
+
+    @Test
+    void addDataToHashFromCSVFileTest(){
+        var sensorCSVManager = new SensorCSVManager();
+        sensorCSVManager.addDataToHashFromCSVFile();
+        var objToHash = new Sensor(1, 45);
+        var testList = new LinkedList<Sensor>();
+        testList.add(sensorCSVManager.readHash(1));
+        Assertions.assertEquals(testList.get(0).getSensorId(), objToHash.getSensorId());
+    }
 }
