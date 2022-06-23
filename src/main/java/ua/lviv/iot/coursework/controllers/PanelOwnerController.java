@@ -12,8 +12,8 @@ import java.util.List;
 @RequestMapping("/panelowner")
 public class PanelOwnerController extends PanelOwnerServiceImpl {
 
-    @Qualifier("PanelOwnerService")
-    private final PanelOwnerServiceImpl panelOwnerServiceImpl = new PanelOwnerServiceImpl();
+    @Qualifier("PanelOwnerServiceImpl")
+    private PanelOwnerServiceImpl panelOwnerServiceImpl;
 
     @PostMapping
     @Override

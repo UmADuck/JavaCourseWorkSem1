@@ -12,8 +12,8 @@ import java.util.List;
 @RequestMapping("/sensor")
 public class SensorController extends SensorServiceImpl {
 
-    @Qualifier("SensorService")
-    private final SensorServiceImpl sensorServiceImpl = new SensorServiceImpl();
+    @Qualifier("SensorServiceImpl")
+    private SensorServiceImpl sensorServiceImpl;
 
     @PostMapping
     @Override

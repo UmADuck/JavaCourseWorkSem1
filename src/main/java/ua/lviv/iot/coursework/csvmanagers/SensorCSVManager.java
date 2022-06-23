@@ -63,7 +63,7 @@ public class SensorCSVManager {
         try (BufferedReader br = Files.newBufferedReader(pathToFile,
                 StandardCharsets.US_ASCII)) {
 
-            long numberOfLines = 0;
+            long numberOfLines;
             numberOfLines = Files.lines(pathToFile).count();
 
             for(int i = 0; i < numberOfLines; i++){

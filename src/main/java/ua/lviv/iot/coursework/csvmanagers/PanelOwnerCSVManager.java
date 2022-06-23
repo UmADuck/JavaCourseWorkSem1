@@ -51,7 +51,7 @@ public class PanelOwnerCSVManager {
         Path pathToFile = Paths.get(fileName);
         try (BufferedReader br = Files.newBufferedReader(pathToFile,
                 StandardCharsets.US_ASCII)) {
-            long numberOfLines = 0;
+            long numberOfLines;
             numberOfLines = Files.lines(pathToFile).count();
 
             for(int i = 0; i < numberOfLines; i++){
@@ -62,7 +62,6 @@ public class PanelOwnerCSVManager {
                 if(!panelOwnerMap.containsKey(panelOwner.getUserId())) {
                     panelOwnerMap.put(panelOwner.getUserId(), panelOwner);
                 }
-                line = null;
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -12,8 +12,8 @@ import java.util.List;
 @RequestMapping("/solarpanel")
 public class PanelController extends PanelServiceImpl {
 
-    @Qualifier("PanelService")
-    private final PanelServiceImpl panelServiceImpl = new PanelServiceImpl();
+    @Qualifier("PanelServiceImpl")
+    private PanelServiceImpl panelServiceImpl;
 
     @PostMapping
     @Override
