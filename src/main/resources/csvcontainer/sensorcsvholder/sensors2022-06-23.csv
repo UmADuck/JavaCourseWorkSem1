@@ -1,0 +1,5 @@
+sensorId:, timeOfLaunch, timeOfWork, energyGivenPerHour, energyGivenPerDay, levelOfBatteryCapacity, currentAngle, currentPriceForElectricity, priceOfSoldEnergyPerHour:
+time: 2022-06-23-01:15
+1, 2022-06-10, 5, 500, 0, -1785, 145, 41, 20500
+2, 2022-06-10, 7, 300, 0, -1309, 250, 64, 19200
+3, 2022-06-10, 6, 400, 0, -1596, 230, 64, 25600

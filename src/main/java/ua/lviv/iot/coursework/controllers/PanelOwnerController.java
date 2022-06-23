@@ -1,5 +1,6 @@
 package ua.lviv.iot.coursework.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.coursework.models.PanelOwner;
@@ -13,6 +14,7 @@ import java.util.List;
 public class PanelOwnerController extends PanelOwnerServiceImpl {
 
     @Qualifier("PanelOwnerServiceImpl")
+    @Autowired
     private PanelOwnerServiceImpl panelOwnerServiceImpl;
 
     @PostMapping

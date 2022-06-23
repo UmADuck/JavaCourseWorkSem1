@@ -8,7 +8,7 @@ import ua.lviv.iot.coursework.models.SolarPanel;
 import java.util.LinkedList;
 import java.util.List;
 
-@Service("PanelService")
+@Service("PanelServiceImpl")
 public class PanelServiceImpl implements PanelService {
 
 

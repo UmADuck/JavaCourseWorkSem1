@@ -8,7 +8,7 @@ import ua.lviv.iot.coursework.models.PanelOwner;
 import java.util.LinkedList;
 import java.util.List;
 
-@Service("PanelOwnerService")
+@Service("PanelOwnerServiceImpl")
 public class PanelOwnerServiceImpl implements PanelOwnerService {
 
     private final PanelOwnerCSVManager manager = new PanelOwnerCSVManager();

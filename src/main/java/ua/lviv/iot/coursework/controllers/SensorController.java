@@ -1,5 +1,6 @@
 package ua.lviv.iot.coursework.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ua.lviv.iot.coursework.models.Sensor;
@@ -13,6 +14,7 @@ import java.util.List;
 public class SensorController extends SensorServiceImpl {
 
     @Qualifier("SensorServiceImpl")
+    @Autowired
     private SensorServiceImpl sensorServiceImpl;
 
     @PostMapping

@@ -8,7 +8,7 @@ import ua.lviv.iot.coursework.models.Sensor;
 import java.util.LinkedList;
 import java.util.List;
 
-@Service("SensorService")
+@Service("SensorServiceImpl")
 public class SensorServiceImpl implements SensorService {
 
     private final SensorCSVManager manager = new SensorCSVManager();
