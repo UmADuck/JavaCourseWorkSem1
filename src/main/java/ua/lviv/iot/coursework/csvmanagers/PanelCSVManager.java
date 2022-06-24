@@ -69,6 +69,34 @@ public class PanelCSVManager {
         }
     }
 
+    public void addNewObjectDataToCSV(SolarPanel solarPanel){
+        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
+                "solarPanels" + strDate + ".csv")) {
+            writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: " + strDateWithHours);
+            for (SolarPanel elem : templates.getTemplateList()) {
+                writer.write("\r\n");
+                writer.write(elem.toCSV());
+            }
+            writer.write(solarPanel.toCSV());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (FileWriter otherWriter = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
+                "panelData" + ".csv")) {
+
+            for (SolarPanel elem : templates.getTemplateList()) {
+                otherWriter.write(elem.toCSV());
+                otherWriter.write("\r\n");
+            }
+            otherWriter.write(solarPanel.toCSV());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public SolarPanel readHash(int id) {
 
         return panelMap.get(id);
@@ -106,7 +134,8 @@ public class PanelCSVManager {
     }
 
     public void creatingCSVEachDay() throws IOException {
-        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" + "solarPanels" + strDate + ".csv")) {
+        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
+                "solarPanels" + strDate + ".csv")) {
             writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: " + strDateWithHours);
             for (SolarPanel elem : templates.getTemplateList()) {
                 writer.write("\r\n");
@@ -116,7 +145,8 @@ public class PanelCSVManager {
     }
 
     public void creatingOnlyObjectDataCSV() throws IOException {
-        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" + "panelData" + ".csv")) {
+        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
+                "panelData" + ".csv")) {
 
             for (SolarPanel elem : templates.getTemplateList()) {
                 writer.write(elem.toCSV());

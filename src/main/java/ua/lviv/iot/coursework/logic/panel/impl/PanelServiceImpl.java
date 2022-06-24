@@ -22,6 +22,7 @@ public class PanelServiceImpl implements PanelService {
             manager.addDataToHashFromCSVFile();
         }
         manager.putToHash(solarPanel);
+        manager.addNewObjectDataToCSV(solarPanel);
     }
 
     @Override
@@ -49,7 +50,9 @@ public class PanelServiceImpl implements PanelService {
         var checkIfEmpty = new LinkedList<SolarPanel>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
+            manager.updateHash(id, solarPanel);
         }
+        manager.addNewObjectDataToCSV(solarPanel);
         return manager.updateHash(id, solarPanel);
     }
 

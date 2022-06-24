@@ -1,6 +1,7 @@
 package ua.lviv.iot.coursework.csvmanagers;
 
 import org.springframework.stereotype.Component;
+import ua.lviv.iot.coursework.models.PanelOwner;
 import ua.lviv.iot.coursework.models.Sensor;
 import ua.lviv.iot.coursework.models.templates.SensorTemplates;
 
@@ -76,6 +77,48 @@ public class SensorCSVManager {
                 }
             }
         } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addNewObjectDataToCSV(Sensor sensor) {
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/" +
+                "sensorcsvholder/sensors" + strDate + ".csv")){
+            writer.write(templates.getTemplateList().get(0).getStaticHeaders());
+            for(Sensor elem: templates.getTemplateList()){
+                writer.write("\r\n");
+                writer.write(elem.staticToCSV());
+                writer.write("\r\n");
+            }
+            writer.write(sensor.staticToCSV());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        try(FileWriter writer2 = new FileWriter("src/main/resources/csvcontainer/" +
+                "sensorcsvholder/sensors" + strDate + ".csv")){
+
+            writer2.write(templates.getTemplateList().get(0).getNonStaticHeaders() +
+                    "\ntime: "+ strDateWithHours);
+            for(Sensor elem: templates.getTemplateList()){
+                writer2.write("\r\n");
+                writer2.write(elem.nonStaticToCSV());
+            }
+            writer2.write(sensor.nonStaticToCSV());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        try(FileWriter writer3 = new FileWriter("src/main/resources/csvcontainer/" +
+                "sensorcsvholder/sensorData" + ".csv")){
+
+            for(Sensor elem: templates.getTemplateList()){
+                writer3.write(elem.nonStaticToCSV());
+                writer3.write("\r\n");
+            }
+            writer3.write(sensor.nonStaticToCSV());
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

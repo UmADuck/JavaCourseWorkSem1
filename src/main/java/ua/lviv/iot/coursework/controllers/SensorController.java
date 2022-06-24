@@ -17,6 +17,8 @@ public class SensorController extends SensorServiceImpl {
     @Autowired
     private SensorServiceImpl sensorServiceImpl;
 
+    private PanelController panelController;
+
     @PostMapping
     @Override
     public void create(@RequestBody Sensor sensor) {
@@ -53,6 +55,7 @@ public class SensorController extends SensorServiceImpl {
         Sensor sensor = sensorServiceImpl.read(id);
         if(sensor == null)
             throw new SensorNotFoundException("id" + id);
+        panelController.read(id);
         return sensor;
     }
 }

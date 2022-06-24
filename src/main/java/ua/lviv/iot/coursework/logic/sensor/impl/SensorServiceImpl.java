@@ -20,6 +20,7 @@ public class SensorServiceImpl implements SensorService {
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
         }
+        manager.addNewObjectDataToCSV(sensor);
         manager.putToHash(sensor);
     }
 
@@ -49,7 +50,9 @@ public class SensorServiceImpl implements SensorService {
         var checkIfEmpty = new LinkedList<Sensor>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
+            manager.updateHash(id, sensor);
         }
+        manager.addNewObjectDataToCSV(sensor);
         return manager.updateHash(id, sensor);
     }
 

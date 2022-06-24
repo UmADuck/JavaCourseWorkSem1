@@ -49,8 +49,11 @@ public class PanelOwnerServiceImpl implements PanelOwnerService {
         var checkIfEmpty = new LinkedList<PanelOwner>(manager.getAllHash());
         if (checkIfEmpty.isEmpty()) {
             manager.addDataToHashFromCSVFile();
+            manager.updateHash(id, panelOwner);
         }
+        manager.addNewObjectDataToCSV(panelOwner);
         return manager.updateHash(id, panelOwner);
+
     }
 
     @Override

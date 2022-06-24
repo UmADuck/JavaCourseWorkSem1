@@ -2,6 +2,7 @@ package ua.lviv.iot.coursework.csvmanagers;
 
 import org.springframework.stereotype.Component;
 import ua.lviv.iot.coursework.models.PanelOwner;
+import ua.lviv.iot.coursework.models.SolarPanel;
 import ua.lviv.iot.coursework.models.templates.PanelOwnerTemplates;
 
 import java.io.BufferedReader;
@@ -67,6 +68,34 @@ public class PanelOwnerCSVManager {
             e.printStackTrace();
         }
     }
+
+    public void addNewObjectDataToCSV(PanelOwner panelOwner) {
+        try(FileWriter writer = new FileWriter("src/main/resources/csvcontainer/" +
+                "panelownercsvholder/panelOwners"+ strDate + ".csv")){
+            writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: "+ strDateWithHours);
+            for(PanelOwner elem: templates.getTemplateList()){
+                writer.write("\r\n");
+                writer.write(elem.toCSV());
+            }
+            writer.write(panelOwner.toCSV());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        try(FileWriter otherWriter = new FileWriter("src/main/resources/csvcontainer/" +
+                "panelownercsvholder/panelOwnerData" + ".csv")){
+
+            for(PanelOwner elem: templates.getTemplateList()){
+                otherWriter.write(elem.toCSV());
+                otherWriter.write("\r\n");
+            }
+            otherWriter.write(panelOwner.toCSV());
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public PanelOwner readHash(int id) {
 
