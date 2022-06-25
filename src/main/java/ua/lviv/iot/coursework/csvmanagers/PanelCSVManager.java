@@ -3,7 +3,6 @@ package ua.lviv.iot.coursework.csvmanagers;
 import org.springframework.stereotype.Component;
 import ua.lviv.iot.coursework.models.PanelTypes;
 import ua.lviv.iot.coursework.models.SolarPanel;
-import ua.lviv.iot.coursework.models.templates.SolarPanelTemplates;
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -20,15 +19,11 @@ import java.util.*;
 public class PanelCSVManager {
 
     private final Date date = Calendar.getInstance().getTime();
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    String strDate = dateFormat.format(date);
-
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final String strDate = dateFormat.format(date);
     private final Date dateWithHours = Calendar.getInstance().getTime();
-    DateFormat dateFormatWithHours = new SimpleDateFormat("yyyy-MM-dd-hh:mm");
-    String strDateWithHours = dateFormatWithHours.format(dateWithHours);
-
-    private final Map<Integer, SolarPanel> panelMap = new HashMap<>();
-    private final SolarPanelTemplates templates = new SolarPanelTemplates();
+    private final DateFormat dateFormatWithHours = new SimpleDateFormat("yyyy-MM-dd-hh:mm");
+    private final String strDateWithHours = dateFormatWithHours.format(dateWithHours);
 
     private static SolarPanel createSolarPanel(String[] metadata) {
         int panelId = Integer.parseInt(metadata[0]);
@@ -36,119 +31,44 @@ public class PanelCSVManager {
         int panelPower = Integer.parseInt(metadata[2]);
         int batteryCapacity = Integer.parseInt(metadata[3]);
         String panelAddress = metadata[4];
+        int ownerId = Integer.parseInt(metadata[5]);
 
-        return new SolarPanel(panelId, panelType, panelPower, batteryCapacity, panelAddress);
+        return new SolarPanel(panelId, panelType, panelPower, batteryCapacity, panelAddress, ownerId);
     }
 
-    public void addStartingValuesToHash(List<Integer> list) {
-        var tempList = templates.getTemplateList();
-        for (int i = 0; i < list.size(); i++) {
-            panelMap.put(list.get(i), tempList.get(i));
-        }
-    }
-
-    public void addDataToHashFromCSVFile() {
-        var fileName = "src/main/resources/csvcontainer/" + "panelcsvholder/panelData.csv";
+    public List<SolarPanel> getAllObjectsFromCSVFile(String wayToCSVFiles) {
+        var tempList = new ArrayList<SolarPanel>();
+        var fileName = wayToCSVFiles + "panelData.csv";
         Path pathToFile = Paths.get(fileName);
+        String line = "";
+        String splitBy = ",\s";
         try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII)) {
-            long numberOfLines;
-            numberOfLines = Files.lines(pathToFile).count();
 
-            for (int i = 0; i < numberOfLines; i++) {
-                String line = br.readLine();
-                String[] attributes = line.split(",\s");
+            while ((line = br.readLine()) != null) {
+                String[] attributes = line.split(splitBy);
 
-                SolarPanel solarPanel = createSolarPanel(attributes);
-                if (!panelMap.containsKey(solarPanel.getPanelId())) {
-                    panelMap.put(solarPanel.getPanelId(), solarPanel);
-                }
+                tempList.add(createSolarPanel(attributes));
             }
-
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void addNewObjectDataToCSV(SolarPanel solarPanel){
-        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
-                "solarPanels" + strDate + ".csv")) {
-            writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: " + strDateWithHours);
-            for (SolarPanel elem : templates.getTemplateList()) {
-                writer.write("\r\n");
-                writer.write(elem.toCSV());
-            }
-            writer.write(solarPanel.toCSV());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (FileWriter otherWriter = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
-                "panelData" + ".csv")) {
-
-            for (SolarPanel elem : templates.getTemplateList()) {
-                otherWriter.write(elem.toCSV());
-                otherWriter.write("\r\n");
-            }
-            otherWriter.write(solarPanel.toCSV());
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public SolarPanel readHash(int id) {
-
-        return panelMap.get(id);
-    }
-
-    public void putToHash(SolarPanel solarPanel) {
-        if (!panelMap.containsKey(solarPanel.getPanelId())) {
-            panelMap.put(solarPanel.getPanelId(), solarPanel);
-        }
-    }
-
-    public boolean updateHash(int id, SolarPanel solarPanel) {
-
-        if (panelMap.containsKey(id)) {
-            panelMap.replace(id, solarPanel);
-            solarPanel.setPanelId(id);
-            return true;
-        } else panelMap.put(id, solarPanel);
-        return false;
-    }
-
-    public LinkedList<SolarPanel> getAllHash() {
-        var tempList = new LinkedList<SolarPanel>();
-        for (Map.Entry<Integer, SolarPanel> entry : panelMap.entrySet()) {
-            tempList.add(entry.getValue());
         }
         return tempList;
     }
 
-    public boolean removeFromHash(int id) {
-        if (panelMap.containsKey(id)) {
-            panelMap.remove(id);
-            return true;
-        } else return false;
-    }
-
-    public void creatingCSVEachDay() throws IOException {
-        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
-                "solarPanels" + strDate + ".csv")) {
-            writer.write(templates.getTemplateList().get(0).getHeaders() + "\ntime: " + strDateWithHours);
-            for (SolarPanel elem : templates.getTemplateList()) {
+    public void creatingCSVEachDay(List<SolarPanel> panelList, String wayToCSVFiles) throws IOException {
+        try (FileWriter writer = new FileWriter(wayToCSVFiles + "solarPanels" + strDate + ".csv")) {
+            writer.write(panelList.get(0).getHeaders());
+            for (SolarPanel elem : panelList) {
                 writer.write("\r\n");
                 writer.write(elem.toCSV());
             }
+            writer.write("\ntime: " + strDateWithHours);
         }
     }
 
-    public void creatingOnlyObjectDataCSV() throws IOException {
-        try (FileWriter writer = new FileWriter("src/main/resources/csvcontainer/panelcsvholder/" +
-                "panelData" + ".csv")) {
-
-            for (SolarPanel elem : templates.getTemplateList()) {
+    public void creatingOnlyObjectDataCSV(List<SolarPanel> panelList, String wayToCSVFiles) throws IOException {
+        try (FileWriter writer = new FileWriter(wayToCSVFiles + "panelData" + ".csv")) {
+            for (SolarPanel elem : panelList) {
                 writer.write(elem.toCSV());
                 writer.write("\r\n");
             }

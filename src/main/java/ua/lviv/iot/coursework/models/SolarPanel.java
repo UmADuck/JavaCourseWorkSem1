@@ -20,18 +20,19 @@ public class SolarPanel{
     private int panelPower;
     private int batteryCapacity;
     private String panelAddress;
+    private int ownerId;
 
     @Transient
     public String getHeaders(){
 
         return "panelId" + ", " + "panelType" + ", " + "panelPower" + ", " +
-                "batteryCapacity" + ", " + "panelAddress:";
+                "batteryCapacity" + ", " + "panelAddress" + ", " + "ownerId";
     }
 
 
     public String toCSV(){
 
         return panelId + ", " + panelType + ", " + panelPower + ", " +
-                batteryCapacity + ", " + panelAddress;
+                batteryCapacity + ", " + panelAddress + ", " + ownerId;
     }
 }

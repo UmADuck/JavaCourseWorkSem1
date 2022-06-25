@@ -7,9 +7,13 @@ import java.util.List;
 
 public interface PanelOwnerService {
 
-    public void create(PanelOwner panelOwner);
-    public List<PanelOwner> readALL();
-    public PanelOwner read(int id);
-    public boolean update(int id,PanelOwner panelOwner);
-    public boolean delete(int id);
+    void create(PanelOwner panelOwner);
+
+    List<PanelOwner> readALL();
+
+    PanelOwner read(int id);
+
+    boolean update(int id, PanelOwner panelOwner);
+
+    boolean delete(int id);
 }

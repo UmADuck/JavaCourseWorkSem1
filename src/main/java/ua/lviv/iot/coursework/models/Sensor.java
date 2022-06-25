@@ -14,45 +14,48 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
-public class Sensor{
+public class Sensor {
 
     private int sensorId;
     private LocalDate timeOfLaunch;
-    private int timeOfWork;
+    private int daysOfWork;
     private int energyGivenPerHour;
     private int energyGivenPerDay;
     private int levelOfBatteryCapacity;
     private int currentAngle;
     private int currentPriceForElectricity;
     private int priceOfSoldEnergyPerHour;
+    private int panelId;
 
-    public Sensor(int id, int currentAngle){
-        this.sensorId = id;
+    public Sensor(int sensorId, LocalDate timeOfLaunch, int daysOfWork, int energyGivenPerHour,
+                  int energyGivenPerDay, int levelOfBatteryCapacity, int currentAngle,
+                  int currentPriceForElectricity, int panelId) {
+        this.sensorId = sensorId;
+        this.timeOfLaunch = timeOfLaunch;
+        this.daysOfWork = daysOfWork;
+        this.energyGivenPerHour = energyGivenPerHour;
+        this.energyGivenPerDay = energyGivenPerDay;
+        this.levelOfBatteryCapacity = levelOfBatteryCapacity;
         this.currentAngle = currentAngle;
-    }
-    @Transient
-    public String getStaticHeaders(){
+        this.currentPriceForElectricity = currentPriceForElectricity;
+        this.priceOfSoldEnergyPerHour = this.energyGivenPerHour * this.currentPriceForElectricity;
+        this.panelId = panelId;
 
-        return "sensorId:";
     }
-    @Transient
-    public String getNonStaticHeaders(){
 
-        return "sensorId:" + ", " + "timeOfLaunch" + ", " + "timeOfWork" + ", " + "energyGivenPerHour" +
+    @Transient
+    public String getHeaders() {
+        return "sensorId:" + ", " + "timeOfLaunch" + ", " + "daysOfWork" + ", " + "energyGivenPerHour" +
                 ", " + "energyGivenPerDay" + ", " + "levelOfBatteryCapacity"
-                + ", " + "currentAngle" + ", " + "currentPriceForElectricity" + ", " + "priceOfSoldEnergyPerHour:";
+                + ", " + "currentAngle" + ", " + "currentPriceForElectricity" + ", "
+                + "priceOfSoldEnergyPerHour" + ", " + "panelId";
     }
 
-
-    public String staticToCSV(){
-
-        return "" + sensorId;
-    }
-
-    public String nonStaticToCSV(){
-
-        return  sensorId + ", " + timeOfLaunch + ", " + timeOfWork + ", " + energyGivenPerHour +
+    @Transient
+    public String toCSV() {
+        return sensorId + ", " + timeOfLaunch + ", " + daysOfWork + ", " + energyGivenPerHour +
                 ", " + energyGivenPerDay + ", " + levelOfBatteryCapacity + ", " +
-                currentAngle + ", " + currentPriceForElectricity + ", " + priceOfSoldEnergyPerHour;
+                currentAngle + ", " + currentPriceForElectricity + ", "
+                + priceOfSoldEnergyPerHour + ", " + panelId;
     }
 }

@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface SensorService {
 
-    public void create(Sensor sensor);
-    public List<Sensor> readALL();
-    public Sensor read(int id);
-    public boolean update(int id, Sensor sensor);
-    public boolean delete(int id);
+    void create(Sensor sensor);
+    List<Sensor> readALL();
+    Sensor read(int id);
+    boolean update(int id, Sensor sensor);
+    boolean delete(int id);
 }

@@ -6,9 +6,13 @@ import java.util.List;
 
 public interface PanelService {
 
-    public void create(SolarPanel solarPanel);
-    public List<SolarPanel> readALL();
-    public SolarPanel read(int id);
-    public boolean update(int id, SolarPanel solarPanel);
-    public boolean delete(int id);
+    void create(SolarPanel solarPanel);
+
+    List<SolarPanel> readALL();
+
+    SolarPanel read(int id);
+
+    boolean update(int id, SolarPanel solarPanel);
+
+    boolean delete(int id);
 }

@@ -15,19 +15,19 @@ import java.beans.Transient;
 @Component
 public class PanelOwner {
 
-    private int userId;
+    private int ownerId;
     private String fullName;
     private String ownAddress;
 
     @Transient
     public String getHeaders(){
 
-        return "userId" + ", " + "fullName" + ", " + "ownAddress:";
+        return "ownerId" + ", " + "fullName" + ", " + "ownAddress:";
     }
 
 
     public String toCSV(){
 
-        return userId + ", " + fullName + ", " + ownAddress;
+        return ownerId + ", " + fullName + ", " + ownAddress;
     }
 }

@@ -1,96 +1,70 @@
 package ua.lviv.iot.coursework.csvmanagers;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ua.lviv.iot.coursework.logic.panelowner.impl.PanelOwnerServiceImpl;
 import ua.lviv.iot.coursework.models.PanelOwner;
-import ua.lviv.iot.coursework.models.Sensor;
-import ua.lviv.iot.coursework.models.templates.PanelOwnerTemplates;
 
-import java.util.LinkedList;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 class PanelOwnerCSVManagerTest {
 
-    @Test
-    void addDataToHashFromCSVFile() {
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        var testList = new LinkedList<PanelOwner>();
-        panelOwnerCSVManager.addDataToHashFromCSVFile();
-        testList.add(panelOwnerCSVManager.readHash(1));
-        Assertions.assertEquals(1, testList.get(0).getUserId());
+    static private final String wayToCSVFiles = "src/test/resources/csvcontainer/panelownercsvholder/";
+    private final PanelOwnerServiceImpl service = new PanelOwnerServiceImpl();
+    private final PanelOwnerCSVManager manager = new PanelOwnerCSVManager();
+    private final List<String[]> columnValues = new ArrayList<String[]>();
+    private final Date date = Calendar.getInstance().getTime();
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final String strDate = dateFormat.format(date);
+    private List<PanelOwner> objList = new ArrayList<>();
+
+    @BeforeEach
+    void setUp() {
+        service.addStartingObjectsToCash();
+        objList = service.readALL();
     }
 
     @Test
-    void addStartingValuesToHash() throws  NullPointerException{
-        var  panelOwnerTemplates = new PanelOwnerTemplates();
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        panelOwnerCSVManager.addStartingValuesToHash(panelOwnerTemplates.getIdList());
-        Assertions.assertNotNull(panelOwnerCSVManager.getAllHash());
-    }
-
-    @Test
-    void readHash() throws  NullPointerException{
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        var isEmptyHash = panelOwnerCSVManager.readHash(1);
-        Assertions.assertNull(isEmptyHash);
-    }
-
-    @Test
-    void putToHash() {
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
-        var testList = new LinkedList<PanelOwner>();
-        panelOwnerCSVManager.putToHash(objToHash);
-        testList.add(panelOwnerCSVManager.readHash(1));
-        Assertions.assertEquals(objToHash.getUserId(), testList.get(0).getUserId());
-    }
-
-    @Test
-    void updateHash() {
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
-        var panelOwner = new PanelOwner(2, "Mykola Zinchenko", "Ukraine/Kyiv");
-        panelOwnerCSVManager.putToHash(objToHash);
-        panelOwnerCSVManager.updateHash(1, panelOwner);
-        var testList = new LinkedList<PanelOwner>();
-        testList.add(panelOwnerCSVManager.readHash(1));
-        Assertions.assertEquals(1, panelOwner.getUserId());
-        Assertions.assertEquals(testList.getFirst().getFullName(), panelOwner.getFullName());
-    }
-
-    @Test
-    void getAllHash() {
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
-        var owner2 = new PanelOwner(2, "Mykola Zinchenko", "Ukraine/Kyiv");
-        var testList = new LinkedList<PanelOwner>();
-        testList.add(objToHash);
-        testList.add(owner2);
-        panelOwnerCSVManager.putToHash(objToHash);
-        panelOwnerCSVManager.putToHash(owner2);
-        var testMethodList = new LinkedList<PanelOwner>(panelOwnerCSVManager.getAllHash());
-        Assertions.assertEquals(testList.getFirst().getUserId(), testMethodList.getFirst().getUserId());
-        Assertions.assertEquals(testList.getLast().getUserId(), testMethodList.getLast().getUserId());
+    void getAllObjectsFromCSVFile() throws IOException {
+        manager.creatingCSVEachDay(objList, wayToCSVFiles);
+        var tempList = new ArrayList<>(manager.getAllObjectsFromCSVFile(wayToCSVFiles));
+        Assertions.assertEquals(tempList.size(), objList.size());
+        Assertions.assertEquals(objList.get(0).getOwnerId(), tempList.get(0).getOwnerId());
+        Assertions.assertEquals(objList.get(0).getFullName(), tempList.get(0).getFullName());
+        Assertions.assertEquals(objList.get(0).getOwnAddress(), tempList.get(0).getOwnAddress());
 
     }
 
     @Test
-    void removeFromHash() {
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
-        var testList = new LinkedList<PanelOwner>();
-        testList.add(objToHash);
-        panelOwnerCSVManager.putToHash(objToHash);
-        panelOwnerCSVManager.removeFromHash(1);
-        Assertions.assertNotEquals(panelOwnerCSVManager.getAllHash(), testList);
+    void creatingCSVEachDay() throws IOException {
+        manager.creatingOnlyObjectDataCSV(objList, wayToCSVFiles);
+        int i = 0;
+        try {
+            Scanner scanner = new Scanner(new File(wayToCSVFiles + "panelOwners" + strDate + ".csv"));
+            while (scanner.hasNextLine()) {
+                String[] values = scanner.nextLine().split(",\s");
+                columnValues.add(values);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assertions.assertEquals(Integer.parseInt(columnValues.get(1)[0]), objList.get(0).getOwnerId());
+        Assertions.assertEquals(columnValues.get(1)[1], objList.get(0).getFullName());
+        Assertions.assertEquals(columnValues.get(1)[2], objList.get(0).getOwnAddress());
     }
 
     @Test
-    void addDataToHashFromCSVFileTest(){
-        var panelOwnerCSVManager = new PanelOwnerCSVManager();
-        panelOwnerCSVManager.addDataToHashFromCSVFile();
-        var objToHash = new PanelOwner(1, "Pavlo Pavlenko", "Ukraine/Lviv");
-        var testList = new LinkedList<PanelOwner>();
-        testList.add(panelOwnerCSVManager.readHash(1));
-        Assertions.assertEquals(testList.get(0).getUserId(), objToHash.getUserId());
+    void creatingOnlyObjectDataCSV() throws IOException {
+        manager.creatingOnlyObjectDataCSV(objList, wayToCSVFiles);
+        var tempList = new ArrayList<>(manager.getAllObjectsFromCSVFile(wayToCSVFiles));
+        Assertions.assertEquals(tempList.size(), objList.size());
+        Assertions.assertEquals(objList.get(0).getOwnerId(), tempList.get(0).getOwnerId());
+        Assertions.assertEquals(objList.get(0).getFullName(), tempList.get(0).getFullName());
+        Assertions.assertEquals(objList.get(0).getOwnAddress(), tempList.get(0).getOwnAddress());
     }
 }

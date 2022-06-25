@@ -3,109 +3,78 @@ package ua.lviv.iot.coursework.csvmanagers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.lviv.iot.coursework.models.PanelOwner;
+import ua.lviv.iot.coursework.logic.panel.impl.PanelServiceImpl;
 import ua.lviv.iot.coursework.models.PanelTypes;
-
 import ua.lviv.iot.coursework.models.SolarPanel;
-import ua.lviv.iot.coursework.models.templates.SolarPanelTemplates;
 
-import java.util.LinkedList;
-
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 class PanelCSVManagerTest {
 
+    static private final String wayToCSVFiles = "src/test/resources/csvcontainer/panelcsvholder/";
+    private final PanelServiceImpl service = new PanelServiceImpl();
+    private final PanelCSVManager manager = new PanelCSVManager();
+    private final List<String[]> columnValues = new ArrayList<String[]>();
+    private final Date date = Calendar.getInstance().getTime();
+    private final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final String strDate = dateFormat.format(date);
+    private List<SolarPanel> objList = new ArrayList<>();
+
     @BeforeEach
     void setUp() {
+        service.addStartingObjectsToCash();
+        objList = service.readALL();
+    }
+
+    @Test
+    void getAllObjectsFromCSVFile() throws IOException {
+        manager.creatingCSVEachDay(objList, wayToCSVFiles);
+        var tempList = new ArrayList<>(manager.getAllObjectsFromCSVFile(wayToCSVFiles));
+        Assertions.assertEquals(tempList.size(), objList.size());
+        Assertions.assertEquals(objList.get(0).getPanelId(), tempList.get(0).getPanelId());
+        Assertions.assertEquals(objList.get(0).getPanelType(), tempList.get(0).getPanelType());
+        Assertions.assertEquals(objList.get(0).getPanelPower(), tempList.get(0).getPanelPower());
+        Assertions.assertEquals(objList.get(0).getBatteryCapacity(), tempList.get(0).getBatteryCapacity());
+        Assertions.assertEquals(objList.get(0).getPanelAddress(), tempList.get(0).getPanelAddress());
+        Assertions.assertEquals(objList.get(0).getOwnerId(), tempList.get(0).getOwnerId());
+    }
+
+    @Test
+    void creatingCSVEachDay() throws IOException {
+        manager.creatingOnlyObjectDataCSV(objList, wayToCSVFiles);
+        int i = 0;
+        try {
+            Scanner scanner = new Scanner(new File(wayToCSVFiles + "solarPanels" + strDate + ".csv"));
+            while (scanner.hasNextLine()) {
+                String[] values = scanner.nextLine().split(",\s");
+                columnValues.add(values);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assertions.assertEquals(Integer.parseInt(columnValues.get(1)[0]), objList.get(0).getPanelId());
+        Assertions.assertEquals(PanelTypes.valueOf(columnValues.get(1)[1]), objList.get(0).getPanelType());
+        Assertions.assertEquals(Integer.parseInt(columnValues.get(1)[2]), objList.get(0).getPanelPower());
+        Assertions.assertEquals(Integer.parseInt(columnValues.get(1)[3]), objList.get(0).getBatteryCapacity());
+        Assertions.assertEquals(columnValues.get(1)[4], objList.get(0).getPanelAddress());
+        Assertions.assertEquals(Integer.parseInt(columnValues.get(1)[5]), objList.get(0).getOwnerId());
 
     }
 
     @Test
-    void addDataToHashFromCSVFile() {
-        var panelCSVManager = new PanelCSVManager();
-        var testList = new LinkedList<SolarPanel>();
-        panelCSVManager.addDataToHashFromCSVFile();
-        testList.add(panelCSVManager.readHash(1));
-        Assertions.assertEquals(1, testList.get(0).getPanelId());
-    }
-
-    @Test
-    void addStartingValuesToHash() throws NullPointerException {
-        var panelTemplate = new SolarPanelTemplates();
-        var panelCSVManager = new PanelCSVManager();
-        panelCSVManager.addStartingValuesToHash(panelTemplate.getIdList());
-        Assertions.assertNotNull(panelCSVManager.getAllHash());
-    }
-
-    @Test
-    void readHash() throws NullPointerException {
-        var panelCSVManager = new PanelCSVManager();
-        var isEmptyHash = panelCSVManager.readHash(1);
-        Assertions.assertNull(isEmptyHash);
-    }
-
-    @Test
-    void putToHash() {
-        var panelCSVManager = new PanelCSVManager();
-        var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
-                5000, "Ukraine, Lviv");
-        var testList = new LinkedList<SolarPanel>();
-        panelCSVManager.putToHash(objToHash);
-        testList.add(panelCSVManager.readHash(1));
-        Assertions.assertEquals(objToHash.getPanelId(), testList.get(0).getPanelId());
-    }
-
-    @Test
-    void updateHash() {
-        var panelCSVManager = new PanelCSVManager();
-        var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
-                5000, "Ukraine, Lviv");
-        var panel2 = new SolarPanel(2, PanelTypes.POLYCRYSTALLINE, 300,
-                3000, "Ukraine, Lviv");
-        panelCSVManager.putToHash(objToHash);
-        panelCSVManager.updateHash(1, panel2);
-        var testList = new LinkedList<SolarPanel>();
-        testList.add(panelCSVManager.readHash(1));
-        Assertions.assertEquals(1, panel2.getPanelId());
-        Assertions.assertEquals(testList.getFirst().getPanelPower(), panel2.getPanelPower());
-    }
-
-    @Test
-    void getAllHash() {
-        var panelCSVManager = new PanelCSVManager();
-        var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
-                5000, "Ukraine, Lviv");
-        var panel2 = new SolarPanel(2, PanelTypes.POLYCRYSTALLINE, 300,
-                3000, "Ukraine, Lviv");
-        var testList = new LinkedList<SolarPanel>();
-        testList.add(objToHash);
-        testList.add(panel2);
-        panelCSVManager.putToHash(objToHash);
-        panelCSVManager.putToHash(panel2);
-        var testMethodList = new LinkedList<SolarPanel>(panelCSVManager.getAllHash());
-        Assertions.assertEquals(testList.getFirst().getPanelId(), testMethodList.getFirst().getPanelId());
-        Assertions.assertEquals(testList.getLast().getPanelId(), testMethodList.getLast().getPanelId());
-    }
-
-    @Test
-    void removeFromHash() {
-        var panelCSVManager = new PanelCSVManager();
-        var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
-                5000, "Ukraine, Lviv");
-        var testList = new LinkedList<SolarPanel>();
-        testList.add(objToHash);
-        panelCSVManager.putToHash(objToHash);
-        panelCSVManager.removeFromHash(1);
-        Assertions.assertNotEquals(panelCSVManager.getAllHash(), testList);
-    }
-
-    @Test
-    void addDataToHashFromCSVFileTest(){
-        var panelCSVManager = new PanelCSVManager();
-        panelCSVManager.addDataToHashFromCSVFile();
-        var objToHash = new SolarPanel(1, PanelTypes.MONOCRYSTALLINE, 500,
-                5000, "Ukraine, Lviv");
-        var testList = new LinkedList<SolarPanel>();
-        testList.add(panelCSVManager.readHash(1));
-        Assertions.assertEquals(testList.get(0).getPanelId(), objToHash.getPanelId());
+    void creatingOnlyObjectDataCSV() throws IOException {
+        manager.creatingOnlyObjectDataCSV(objList, wayToCSVFiles);
+        var tempList = new ArrayList<>(manager.getAllObjectsFromCSVFile(wayToCSVFiles));
+        Assertions.assertEquals(tempList.size(), objList.size());
+        Assertions.assertEquals(objList.get(0).getPanelId(), tempList.get(0).getPanelId());
+        Assertions.assertEquals(objList.get(0).getPanelType(), tempList.get(0).getPanelType());
+        Assertions.assertEquals(objList.get(0).getPanelPower(), tempList.get(0).getPanelPower());
+        Assertions.assertEquals(objList.get(0).getBatteryCapacity(), tempList.get(0).getBatteryCapacity());
+        Assertions.assertEquals(objList.get(0).getPanelAddress(), tempList.get(0).getPanelAddress());
+        Assertions.assertEquals(objList.get(0).getOwnerId(), tempList.get(0).getOwnerId());
     }
 }
