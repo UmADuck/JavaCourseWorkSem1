@@ -7,6 +7,8 @@ Use Java 17 and any IDE that supports java
 
 This code was written using Intellij IDEA 2021.3.2
 
+If there are no folder csvcontainer in src/main/resources or src/test/resources then u should create it and also create 3 another folders inside csvcontainer in both paths: panelcsvholder panelownercsvholder sensorcsvholder
+
 In any browser in search line type:
 
 localhost:8080/{class name}/{id}
